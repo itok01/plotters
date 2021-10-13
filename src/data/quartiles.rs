@@ -47,12 +47,11 @@ impl Quartiles {
         let mut s = s.to_owned();
         s.sort_unstable_by(|a, b| a.partial_cmp(b).unwrap());
 
+        let lower_fence = Quartiles::percentile_of_sorted(&s, 0_f64);
         let lower = Quartiles::percentile_of_sorted(&s, 25_f64);
         let median = Quartiles::percentile_of_sorted(&s, 50_f64);
         let upper = Quartiles::percentile_of_sorted(&s, 75_f64);
-        let iqr = upper - lower;
-        let lower_fence = lower - 1.5 * iqr;
-        let upper_fence = upper + 1.5 * iqr;
+        let upper_fence = Quartiles::percentile_of_sorted(&s, 100_f64);
         Self {
             lower_fence,
             lower,
